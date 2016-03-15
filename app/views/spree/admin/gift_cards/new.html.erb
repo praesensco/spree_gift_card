@@ -3,14 +3,14 @@
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:back_to_gift_cards_list), spree.admin_gift_cards_path, :icon => 'arrow-left', class: 'btn btn-primary' %>
+  <%= button_link_to Spree.t(:back_to_gift_cards_list), spree.admin_gift_cards_path, icon: 'arrow-left', class: 'btn btn-primary' %>
 <% end %>
 
-<%= render :partial => 'spree/shared/error_messages', :locals => { :target => @gift_card } %>
+<%= render partial: 'spree/shared/error_messages', locals: { target: @gift_card } %>
 
 <%= form_for [:admin, @gift_card] do |f| %>
   <fieldset class="no-border-top">
-    <%= render :partial => 'form', :locals => { :f => f } %>
-    <%= render :partial => 'spree/admin/shared/new_resource_links' %>
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/new_resource_links' %>
   </fieldset>
 <% end %>

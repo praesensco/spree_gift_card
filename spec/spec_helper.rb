@@ -31,17 +31,19 @@ require 'spree/testing_support/factories'
 require 'spree/testing_support/authorization_helpers'
 require 'spree/testing_support/capybara_ext'
 require 'spree/testing_support/url_helpers'
+require 'rspec/active_model/mocks'
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Spree::TestingSupport::UrlHelpers
   config.extend Spree::TestingSupport::AuthorizationHelpers::Request, :type => :feature # once spree updates this can be removed
   config.color = true
+  config.infer_spec_type_from_file_location!
 
   # Set to false for running JS drivers.
   config.use_transactional_fixtures = false
 
-  config.before :each do
+  config.before :each do |example|
     if example.metadata[:js]
       DatabaseCleaner.strategy = :truncation
     else

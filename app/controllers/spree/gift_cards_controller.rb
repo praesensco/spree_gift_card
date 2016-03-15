@@ -32,7 +32,7 @@ module Spree
         redirect_to cart_path
       rescue ActiveRecord::RecordInvalid
         find_gift_card_variants
-        render :action => :new
+        render :new
       end
     end
 

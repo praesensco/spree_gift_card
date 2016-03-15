@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Spree::GiftCard do
+describe Spree::GiftCard, type: :model do
 
   it { is_expected.to have_many(:transactions) }
 
@@ -32,7 +32,7 @@ describe Spree::GiftCard do
     end
 
     it 'should not be activatable if no current value' do
-      gift_card.stub :current_value => 0
+      allow(gift_card).to receive_messages :current_value => 0
       expect(gift_card.order_activatable?(mock_model(Spree::Order, state: 'cart', created_at: (gift_card.created_at + 1.second)))).to be_falsey
     end
 

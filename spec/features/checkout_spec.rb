@@ -81,7 +81,7 @@ describe "Checkout", js: true do
       click_button "Save and Continue"
 
       within '#line-items' do
-        page.should have_content("-$5.00")
+        expect(page).to have_content("-$5.00")
       end
     end
 
