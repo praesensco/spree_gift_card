@@ -11,7 +11,8 @@ Spree::Order.class_eval do
       adjustment.source.debit(adjustment.amount, self)
     end
   end
-  alias_method_chain :finalize!, :gift_card
+  alias_method :finalize_without_gift_card!, :finalize!
+  alias_method :finalize!, :finalize_with_gift_card!
 
   # Tells us if there is the specified gift code already associated with the order
   # regardless of whether or not its currently eligible.
