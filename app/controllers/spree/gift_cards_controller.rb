@@ -2,6 +2,7 @@ module Spree
   class GiftCardsController < Spree::StoreController
 
     def new
+      @variant = Spree::Product.find_by(slug: params[:product_id]).try(:master)
       find_gift_card_variants
       @gift_card = GiftCard.new
     end

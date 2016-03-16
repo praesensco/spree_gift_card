@@ -1,8 +1,6 @@
 Spree::Payment.class_eval do
 
-  state_machine do
-    after_transition to: :complete, do: :send_gift_card
-  end
+  state_machine.after_transition to: :completed, do: :send_gift_card
 
   def send_gift_card
     order.line_items.each do |li|
