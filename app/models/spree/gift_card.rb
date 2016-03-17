@@ -11,8 +11,8 @@ module Spree
 
     has_many :transactions, class_name: 'Spree::GiftCardTransaction'
 
-    validates :code, presence: true, uniqueness: true
-    validates :current_value, :name, :original_value, presence: true
+    validates :code, uniqueness: true, allow_blank: true
+    validates :current_value, :name, :original_value, :code, presence: true
     validates :email, email: true, presence: true
 
     before_validation :generate_code, on: :create
