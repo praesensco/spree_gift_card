@@ -18,6 +18,18 @@ module Spree
     before_validation :generate_code, on: :create
     before_validation :set_values, on: :create
 
+    def safely_redeem(user)
+      if user.email == email && current_value.to_f > 0.0
+        redeem(user)
+      elsif current_value.to_f > 0.0
+        self.errors[:base] = 'You are not authorized to perform this action.'
+        false
+      else
+        self.errors[:base] = 'Current value should be more than 0.'
+        false
+      end
+    end
+
     def apply(order)
       # Nothing to do if the gift card is already associated with the order
       return false if order.gift_credit_exists?(self)
@@ -39,11 +51,11 @@ module Spree
       self.calculator.compute(calculable, self)
     end
 
-    def debit(amount, order)
+    def debit(amount, order = nil)
       raise 'Cannot debit gift card by amount greater than current value.' if (self.current_value - amount.to_f.abs) < 0
       transaction = self.transactions.build
       transaction.amount = amount
-      transaction.order  = order
+      transaction.order  = order if order
       self.current_value = self.current_value - amount.abs
       self.save
     end
@@ -64,6 +76,33 @@ module Spree
     end
 
     private
+
+    def redeem(user)
+      begin
+        transaction do
+          previous_current_value = current_value
+          debit(current_value)
+          build_store_credit(user, previous_current_value).save!
+        end
+      rescue
+        self.errors[:base] = 'There some issue while redeeming the gift card.'
+      end
+    end
+
+    def build_store_credit(user, previous_current_value)
+      user.store_credits.build(
+            amount: previous_current_value,
+            category: Spree::StoreCreditCategory.gift_card.last,
+            memo: "Gift Card #{ variant.code } #{ recieved_from }",
+            created_by: user,
+            action_originator: user,
+            currency: Spree::Config[:currency]
+        )
+    end
+
+    def recieved_from
+      line_item.order.email
+    end
 
     def generate_code
       until self.code.present? && self.class.where(code: self.code).count == 0
