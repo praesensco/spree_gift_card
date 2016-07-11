@@ -6,7 +6,7 @@ module Spree
 
     def redeem
       if @gift_card.safely_redeem(spree_current_user)
-        redirect_to root_path, flash: { success: 'Gift card has been redeemed successfully.' }
+        redirect_to redirect_after_redeem, flash: { success: 'Gift card has been redeemed successfully.' }
       else
         redirect_to root_path, flash: { error: @gift_card.errors.full_messages.to_sentence }
       end
@@ -47,6 +47,10 @@ module Spree
     end
 
     private
+
+    def redirect_after_redeem
+      root_path
+    end
 
     def load_gift_card
       @gift_card = Spree::GiftCard.where(code: params[:id]).last
