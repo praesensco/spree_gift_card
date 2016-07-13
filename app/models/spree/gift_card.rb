@@ -19,13 +19,13 @@ module Spree
     before_validation :set_values, on: :create
 
     def safely_redeem(user)
-      if user.email == email && current_value.to_f > 0.0
+      if user && user.email == email && current_value.to_f > 0.0 && line_item.order.completed?
         redeem(user)
       elsif current_value.to_f > 0.0
         self.errors[:base] = 'You are not authorized to perform this action.'
         false
       else
-        self.errors[:base] = 'Current value should be more than 0.'
+        self.errors[:base] = 'This Card has already been redeemed.'
         false
       end
     end
@@ -86,6 +86,7 @@ module Spree
         end
       rescue
         self.errors[:base] = 'There some issue while redeeming the gift card.'
+        false
       end
     end
 
