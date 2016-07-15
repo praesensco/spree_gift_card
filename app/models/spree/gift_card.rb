@@ -94,7 +94,7 @@ module Spree
       user.store_credits.build(
             amount: previous_current_value,
             category: Spree::StoreCreditCategory.gift_card.last,
-            memo: "Gift Card - #{ product.name } received from #{ recieved_from }",
+            memo: "Gift Card - #{ variant.product.name } received from #{ recieved_from }",
             created_by: user,
             action_originator: user,
             currency: Spree::Config[:currency]
