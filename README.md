@@ -1,13 +1,13 @@
 SpreeGiftCard
 =============
 
-SpreeGiftCard is an extension and one stop solution to integrate GiftCard functionality in your spree application.
+SpreeGiftCard is an extension and one stop solution to integrate gift card functionality in a spree application.
 
-* This integration enables you to Create and Apply Gift card Functionality, through products which are GiftCard enabled.
+* This extension allows the admin to create a gift card, by just enabling it from Admin end.
 
-* GiftCard can be bought as any normal product from your spree store. When gift card is bought, details are sent to recipient, which includes GiftCard `Code`, on succesful order payment.
+* Gift card is treated and can be bought as any normal product from your spree store. When a gift card is successfully bought, its details are sent to recipient's email address, which includes gift card `Code`.
 
-* Gift cards can be redeemed by entering a unique GiftCard `Code` during checkout.
+* Recipient can then redeem the gift card by entering the unique gift card `Code` during checkout on payment step.
 
 ## Installation
 
@@ -33,16 +33,16 @@ SpreeGiftCard is an extension and one stop solution to integrate GiftCard functi
 3. Working
 ---
 
-* Admin can create `Gift Card` through
+* Admin can create `gift card` through
 
     `Admin -> Products -> New`
 
-    while creating a New Gift Card, check `is gift card`, which means the product is GiftCard.
-* Once GiftCard is created, it is visible to customer.
-* When purchasing a GiftCard, a form is rendered to user, on which one can fill the `Value`,`Email`, `Recipient name` and `Note`. Once your order-payment is successfully captured, the GiftCard will be send to the email mentioned in GiftCard form.
-* The `Email` will contain details of GiftCard, amount, code, sender's email and note.
-* One can redeem the GiftCard by applying gift card code at payment step.
-* Besides, One can also add GiftCard shipment category and method, if gift card is meant for email delivery.
+    while creating a new gift card, check `is gift card`, which means the product is gift card.
+* Once gift card is created, it is visible to customer.
+* When purchasing a gift card, a form is rendered to user, on which one can fill the `value`,`email`, `recipient name` and `note`. Once your order-payment is successfully captured, the gift card will be send to the email mentioned in gift card form.
+* The `Email` will contain details of gift card, amount, code, sender's email and note.
+* One can redeem the gift card by applying gift card code at payment step.
+* Besides, One can also add gift card shipment category and method, if gift card is meant for email delivery.
 
 Contributing
 ------------
