@@ -1,49 +1,82 @@
-SpreeGiftCard [![Build Status](https://secure.travis-ci.org/jdutil/spree_gift_card.png)](http://travis-ci.org/jdutil/spree_gift_card) [![Dependency Status](https://gemnasium.com/jdutil/spree_gift_card.png?travis)](https://gemnasium.com/jdutil/spree_gift_card)
+SpreeGiftCard
 =============
 
-**Please note that upcoming Spree 2.2.x is the end of life for this extension unless a community member would like to take over maintaining it (message me or open an issue if you would like to).  Rather than refactoring extension to make use of the adjustment refactoring in Spree 2.2.x there is likely going to be a complete rewrite handling Gift Cards as a payment method instead of adjustment.**
+SpreeGiftCard is an extension and one stop solution to integrate gift card functionality in a spree application.
 
-**Please use https://github.com/spree-contrib/spree_store_credit_payment_method instead.**
+* This extension allows the admin to create a gift card, by just enabling it from Admin end.
 
-This extension adds gift card functionality to spree.  It is based off the original [spree_gift_cards](http://github.com/spree/spree_gift_cards)
-extension, but differs in that it does not require a user to have an account.  Gift cards may be redeemed by
-entering a unique gift card code during checkout rather than applying store credits to the customers account.
+* Gift card is treated and can be bought as any normal product from your spree store. When a gift card is successfully bought, its details are sent to recipient's email address, which includes gift card `Code`.
 
-Requirements
-============
+* Recipient can then redeem the gift card by entering the unique gift card `Code` during checkout on payment step.
 
-* Spree Core 1.1.0 or greater.
-* Ruby 1.9.2 or greater.
+## Installation
 
-Installation
-============
+1. Just add this line to your `Gemfile`:
+  ```ruby
+  gem 'spree_gift_card',           github: 'vinsol/spree_gift_card',   branch: 'x-x-stable'
+  ```
 
-1. Add `gem 'spree_gift_card', github: 'jdutil/spree_gift_card'` to Gemfile
-1. Run `bundle`
-1. Run `rails g spree_gift_card:install`
-1. Run `rails g spree_gift_card:seed`
+2. Execute the following commands in respective order:
 
-Seed Gift Card Product
-======================
+   ```ruby
+    bundle install
+    ```
 
-    $ rails g spree_gift_card:seed
+   ```ruby
+    rails g spree_gift_card:install
+    ```
+    seed the default data with:
+   ```ruby
+    rails g spree_gift_card:seed
+    ```
+
+3. Working
+---
+
+* Admin can create `gift card` through
+
+    `Admin -> Products -> New`
+
+    while creating a new gift card, check `is gift card`, which means the product is gift card.
+* Once gift card is created, it is visible to customer.
+* When purchasing a gift card, a form is rendered to user, on which one can fill the `value`,`email`, `recipient name` and `note`. Once your order-payment is successfully captured, the gift card will be send to the email mentioned in gift card form.
+* The `Email` will contain details of gift card, amount, code, sender's email and note.
+* One can redeem the gift card by applying gift card code at payment step.
+* Besides, One can also add gift card shipment category and method, if gift card is meant for email delivery.
+
+Contributing
+------------
+
+1. Fork the repo.
+2. Clone your repo.
+3. Run `bundle install`.
+4. Run `bundle exec rake test_app` to create the test application in `spec/test_app`.
+5. Make your changes.
+6. Ensure specs pass by running `bundle exec rspec spec`.
+7. Submit your pull request.
 
 Testing
-=======
+-------
 
-1. bundle exec rake test_app
-1. bundle exec rspec spec
+Be sure to bundle your dependencies and then create a dummy test app for the specs to run against.
 
-Todo
-====
+```shell
+bundle
+bundle exec rake test_app
+bundle exec rspec spec
+```
 
-1. Have spree_gift_card:install prompt to run spree_gift_card:seed and update installation instructions
-1. Have new gift card page mimic styling of product page
-1. Should have infinite gift card product stock.  Don't know of any current spree implementation for this (patch core?).
-1. Should have the option of a default message as the first select option, such as "Select Amount"
-1. Make form fields configurable like spree_contact_us
-1. Should admin deletion just set a deleted_at column so gift card data is not lost?
-1. test product controller redirect?
-1. Apply gift code in a before filter if possible to avoid overriding the update method for easier upgrades?
+When testing your applications integration with this extension you may use it's factories.
+Simply add this require statement to your spec_helper:
 
-Copyright (c) 2012 Jeff Dutil, released under the New BSD License
+```ruby
+require 'spree_gift_card/factories'
+```
+
+
+Credits
+-------
+
+[![vinsol.com: Ruby on Rails, iOS and Android developers](http://vinsol.com/vin_logo.png "Ruby on Rails, iOS and Android developers")](http://vinsol.com)
+
+Copyright (c) 2014 [vinsol.com](http://vinsol.com "Ruby on Rails, iOS and Android developers"), released under the New MIT License
