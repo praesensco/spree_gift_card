@@ -1,5 +1,7 @@
 Spree::Order.class_eval do
 
+  include Spree::Order::GiftCard
+
   attr_accessor :gift_code
 
   # Finalizes an in progress order after checkout is complete.

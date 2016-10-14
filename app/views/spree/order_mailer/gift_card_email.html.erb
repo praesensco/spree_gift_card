@@ -13,9 +13,15 @@
     <td style="width: 85%"> <%= number_to_currency @gift_card.price %> </td>
   </tr>
   <tr>
-    <td style="width: 15%">Claim Code: </td>
-    <td style="width: 85%"> <%= link_to 'Click here', redeem_gift_card_url(@gift_card.code) %> </td>
+    <td style="width: 15%">Gift Code: </td>
+    <td style="width: 85%"> <%= @gift_card.code %> </td>
   </tr>
+  <% if Spree::Config.allow_gift_card_redeem %>
+    <tr>
+      <td style="width: 15%">Claim Code: </td>
+      <td style="width: 85%"> <%= link_to 'Click here', redeem_gift_card_url(@gift_card.code) %> </td>
+    </tr>
+  <% end %>
   <tr>
     <td style="width: 15%">Senders Note:</td>
     <td style="font-style: italic; width: 85%"> <%= @gift_card.note %> </td>

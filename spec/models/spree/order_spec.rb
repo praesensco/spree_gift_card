@@ -24,7 +24,7 @@ describe Spree::Order do
       it "does not let the order total fall below zero" do
         order = create(:order_with_totals)
         order.line_items = [create(:line_item, order: order, price: 20, variant: create(:variant, price: 20))]
-        order.adjustments.create(:label => I18n.t('spree.store_credit') , :amount => -5)
+        order.adjustments.create(label: 'Order Adjustment' , amount: -5)
         order.reload
         order.update!
         gift_card.apply(order)
