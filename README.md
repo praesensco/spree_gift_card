@@ -33,8 +33,7 @@ SpreeGiftCard is an extension and one stop solution to integrate gift card funct
 3. Working
 ---
 
-* A gift card is created by default when you seed data. It can also be created using the steps below.
-* Admin can create `gift card` through
+* A gift card is created by default when you seed data. Admin can also create `gift card` through
 
     `Admin -> Products -> New`
 
