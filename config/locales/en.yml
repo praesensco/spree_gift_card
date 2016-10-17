@@ -1,13 +1,32 @@
 en:
   spree:
+    allow_gift_card_redeem: "Allow Gift Card to be Redeemed"
     apply: "Apply"
     back_to_gift_cards_list: "Back to Gift Cards List"
     buy_gift_card: "Buy gift card"
     current_value: "Current Value"
+    errors:
+      gift_card:
+        greater_than_current_value: "can not be more than current_value"
+        unauthorized: 'You are not authorized to perform this action.'
+        already_redeemed: 'Gift Card has already been redeemed.'
     gift_card: 'Gift Card'
-    gift_card_discount: 'Gift Card Discount'
-    gift_cards: "Gift cards"
     gift_card_calculator: 'Gift Card Calculator'
+    gift_card_discount: 'Gift Card Discount'
+    gift_card_email:
+      subject: 'Congratulation! Gift Card Received!'
+    gift_card_payment_method:
+      insufficient_authorized_amount: "Unable to capture more than authorized amount"
+      insufficient_funds: "Gift Card amount remaining is not sufficient"
+      successful_action: "Successful gift card %{action}"
+      unable_to_capture: "Unable to capture code: %{auth_code}"
+      unable_to_find: "Could not find gift card"
+      unable_to_find_for_action: "Could not find gift card for auth code: %{auth_code} for action: %{action}"
+      unable_to_void: "Unable to void code: %{auth_code}"
+      unable_to_credit: "Unable to credit code: %{auth_code}"
+    gift_card_redeemed: 'Gift card has been redeemed successfully.'
+    gift_card_settings: 'Gift Card Settings'
+    gift_cards: "Gift cards"
     gift_code: 'Gift Code'
     gift_code_applied: 'Gift code has been successfully applied to your order.'
     gift_code_already_applied: 'Gift code has already been used.'
@@ -20,6 +39,3 @@ en:
     successfully_created_gift_card: 'You have successfully created the gift card.'
     transactions: "Transactions"
     value: 'Value'
-    store_credit: 'order adjustment'
-    gift_card_email:
-        subject: 'Congratulation! Gift Card Received!'

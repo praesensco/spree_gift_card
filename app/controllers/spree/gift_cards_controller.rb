@@ -2,6 +2,15 @@ module Spree
   class GiftCardsController < Spree::StoreController
 
     before_action :load_master_variant, only: :new
+    before_action :load_gift_card, only: :redeem
+
+    def redeem
+      if @gift_card.safely_redeem(spree_current_user)
+        redirect_to redirect_after_redeem, flash: { success: Spree.t('gift_card_redeemed') }
+      else
+        redirect_to root_path, flash: { error: @gift_card.errors.full_messages.to_sentence }
+      end
+    end
 
     def new
       find_gift_card_variants
@@ -38,6 +47,17 @@ module Spree
     end
 
     private
+
+    def redirect_after_redeem
+      root_path
+    end
+
+    def load_gift_card
+      @gift_card = Spree::GiftCard.where(code: params[:id]).last
+      unless @gift_card
+        redirect_to root_path, flash: { error: Spree.t('gift_code_not_found') }
+      end
+    end
 
     def find_gift_card_variants
       gift_card_product_ids = Product.not_deleted.where(is_gift_card: true).pluck(:id)

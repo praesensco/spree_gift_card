@@ -1,0 +1,22 @@
+<!-- insert_before '[data-hook=buttons]' -->
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h1 class="panel-title">
+            <%= Spree.t(:gift_card_settings)%>
+          </h1>
+        </div>
+
+        <div class="panel-body">
+          <div class="form-group">
+            <%= label_tag :allow_gift_card_redeem do %>
+              <%= check_box_tag :allow_gift_card_redeem, 1, Spree::Config.allow_gift_card_redeem %>
+              <%= Spree.t(:allow_gift_card_redeem) %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
