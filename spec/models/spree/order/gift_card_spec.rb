@@ -3,13 +3,15 @@ require 'spec_helper'
 describe 'Order' do
   describe '#add_gift_card_payments' do
     let(:order_total) { 500.00 }
-    let(:gift_card_details) { { code: "gc123" } }
+    let(:gift_card) { create(:gift_card) }
+    let(:gift_card_code) { "gc123" }
 
     before { create(:gift_card_payment_method) }
 
-    subject { order.add_gift_card_payments(gift_card_details) }
+    subject { order.add_gift_card_payments(gift_card) }
 
     context 'there is no gift card' do
+      let(:gift_card) { nil }
       let(:order) { create(:order, total: order_total) }
 
       before do
@@ -25,7 +27,7 @@ describe 'Order' do
 
     context 'gift card has sufficient amount to pay for the entire order' do
       let(:variant) { create(:variant, price: order_total) }
-      let(:gift_card) { create(:gift_card, code: gift_card_details[:code], variant: variant) }
+      let(:gift_card) { create(:gift_card, code: gift_card_code, variant: variant) }
       let(:order) { create(:order, total: order_total) }
 
       before do
@@ -45,7 +47,7 @@ describe 'Order' do
       let(:expected_cc_total) { 100.0 }
       let(:gift_card_total) { order_total - expected_cc_total }
       let(:variant) { create(:variant, price: gift_card_total) }
-      let(:gift_card) { create(:gift_card, code: gift_card_details[:code], variant: variant) }
+      let(:gift_card) { create(:gift_card, code: gift_card_code, variant: variant) }
       let(:order) { create(:order, total: order_total) }
 
       before do
@@ -83,10 +85,10 @@ describe 'Order' do
     end
 
     context "order has gift card payments" do
-      let(:gift_card_details) { { code: "gc123" } }
+      let(:gift_card_code) { "gc123" }
       let(:gift_card_total) { 20.0 }
       let(:variant) { create(:variant, price: gift_card_total) }
-      let(:gift_card) { create(:gift_card, code: gift_card_details[:code], variant: variant) }
+      let(:gift_card) { create(:gift_card, code: gift_card_code, variant: variant) }
       let(:applicable_store_credit) { 0.0 }
 
       subject { order }
@@ -94,7 +96,7 @@ describe 'Order' do
       before do
         order.update_column(:total, order_total)
         gift_card
-        order.add_gift_card_payments(gift_card_details)
+        order.add_gift_card_payments(gift_card)
         order.reload
       end
 
@@ -236,16 +238,16 @@ describe 'Order' do
       end
 
       context "order has gift card payments" do
-        let(:gift_card_details) { { code: "gc123" } }
+        let(:gift_card_code) { "gc123" }
         let(:gift_card_total) { 20.0 }
         let(:variant) { create(:variant, price: gift_card_total) }
-        let(:gift_card) { create(:gift_card, code: gift_card_details[:code], variant: variant) }
+        let(:gift_card) { create(:gift_card, code: gift_card_code, variant: variant) }
 
         before do
           create(:gift_card_payment_method)
           order.update_column(:total, order_total)
           gift_card
-          order.add_gift_card_payments(gift_card_details)
+          order.add_gift_card_payments(gift_card)
           order.reload
         end
 
