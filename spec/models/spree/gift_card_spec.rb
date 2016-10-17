@@ -112,83 +112,78 @@ describe Spree::GiftCard, type: :model do
     let(:gift_card) { create(:gift_card, variant: variant) }
 
     context "when already authorized" do
+      let(:auth_code) { gift_card.generate_authorization_code }
+      let(:authorized_amount)  { 13.0 }
+
       before do
-        @auth_code = gift_card.generate_authorization_code
-        @authorized_amount = 13.0
-        gift_card.transactions.create!(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: @authorized_amount, authorization_code: @auth_code)
+        gift_card.transactions.create!(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: authorized_amount, authorization_code: auth_code)
       end
 
       it "expects to return true" do
-        expect(gift_card.authorize(@authorized_amount, action_authorization_code: @auth_code)).to be_truthy
+        expect(gift_card.authorize(authorized_amount, action_authorization_code: auth_code)).to be_truthy
       end
 
       it "expects not to re-authorize given amount" do
         expect {
-          gift_card.authorize(@authorized_amount, action_authorization_code: @auth_code)
+          gift_card.authorize(authorized_amount, action_authorization_code: auth_code)
         }.to_not change { gift_card.authorized_amount }
       end
     end
 
     context "when authorization amount is less than amount remaining" do
-      before do
-        @authorized_amount = 23.9
-      end
+      let(:authorized_amount)  { 23.9 }
 
       it "expects not to return false" do
-        expect(gift_card.authorize(@authorized_amount)).to_not be_falsey
+        expect(gift_card.authorize(authorized_amount)).to_not be_falsey
       end
 
       it "expects to authorize given amount" do
         expect {
-          gift_card.authorize(@authorized_amount)
-        }.to change { gift_card.authorized_amount }.by(@authorized_amount)
+          gift_card.authorize(authorized_amount)
+        }.to change { gift_card.authorized_amount }.by(authorized_amount)
       end
 
       it "expects to create an authorize transaction for the given amount" do
-        gift_card.authorize(@authorized_amount)
-        expect(gift_card.transactions.where(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: @authorized_amount).exists?).to be_truthy
+        gift_card.authorize(authorized_amount)
+        expect(gift_card.transactions.where(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: authorized_amount).exists?).to be_truthy
       end
     end
 
     context "when authorization amount is equal to amount remaining" do
-      before do
-        @authorized_amount = 25.0
-      end
+      let(:authorized_amount)  { 25.0 }
 
       it "expects not to return false" do
-        expect(gift_card.authorize(@authorized_amount)).to_not be_falsey
+        expect(gift_card.authorize(authorized_amount)).to_not be_falsey
       end
 
       it "expects to authorize given amount" do
         expect {
-          gift_card.authorize(@authorized_amount)
-        }.to change { gift_card.authorized_amount }.by(@authorized_amount)
+          gift_card.authorize(authorized_amount)
+        }.to change { gift_card.authorized_amount }.by(authorized_amount)
       end
 
       it "expects to create an authorize transaction for the given amount" do
-        gift_card.authorize(@authorized_amount)
-        expect(gift_card.transactions.where(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: @authorized_amount).exists?).to be_truthy
+        gift_card.authorize(authorized_amount)
+        expect(gift_card.transactions.where(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: authorized_amount).exists?).to be_truthy
       end
     end
 
     context "when authorization amount is greater than amount remaining" do
-      before do
-        @authorized_amount = 26.0
-      end
+      let(:authorized_amount)  { 26.0 }
 
       it "expects to return false" do
-        expect(gift_card.authorize(@authorized_amount)).to be_falsey
+        expect(gift_card.authorize(authorized_amount)).to be_falsey
       end
 
       it "expects not to authorize given amount" do
         expect {
-          gift_card.authorize(@authorized_amount)
+          gift_card.authorize(authorized_amount)
         }.not_to change { gift_card.authorized_amount }
       end
 
       it "expects not to create an authorize transaction for the given amount" do
-        gift_card.authorize(@authorized_amount)
-        expect(gift_card.transactions.where(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: @authorized_amount).exists?).to be_falsey
+        gift_card.authorize(authorized_amount)
+        expect(gift_card.transactions.where(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: authorized_amount).exists?).to be_falsey
       end
     end
   end
@@ -196,21 +191,20 @@ describe Spree::GiftCard, type: :model do
   describe "capture" do
     let(:variant) { create(:variant, price: 25) }
     let(:gift_card) { create(:gift_card, variant: variant) }
+    let(:authorized_amount) { 13.0 }
+    let(:auth_code) { gift_card.transactions.find_by(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: authorized_amount).authorization_code }
 
     before do
-      @authorized_amount = 13.0
-      gift_card.authorize(@authorized_amount)
-      @auth_code = gift_card.transactions.find_by(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: @authorized_amount).authorization_code
+      gift_card.authorize(authorized_amount)
+      auth_code
     end
 
     def capture_payment
-      gift_card.capture(@capture_amount, @auth_code)
+      gift_card.capture(capture_amount, auth_code)
     end
 
     context "when capture amount is less than authorized_amount" do
-      before do
-        @capture_amount = 10.0
-      end
+      let(:capture_amount) { 10.0 }
 
       it "expects not to return false" do
         expect(capture_payment).to be_truthy
@@ -219,25 +213,23 @@ describe Spree::GiftCard, type: :model do
       it "expects to remove amount from authorization" do
         expect {
           capture_payment
-        }.to change { gift_card.authorized_amount }.by(-@capture_amount)
+        }.to change { gift_card.authorized_amount }.by(-capture_amount)
       end
 
       it "expects to remove amount from current_value" do
         expect {
           capture_payment
-        }.to change { gift_card.current_value }.by(-@capture_amount)
+        }.to change { gift_card.current_value }.by(-capture_amount)
       end
 
       it "expects to create a capture transaction for the given amount" do
         capture_payment
-        expect(gift_card.transactions.where(action: Spree::GiftCard::CAPTURE_ACTION, amount: @capture_amount, authorization_code: @auth_code).exists?).to be_truthy
+        expect(gift_card.transactions.where(action: Spree::GiftCard::CAPTURE_ACTION, amount: capture_amount, authorization_code: auth_code).exists?).to be_truthy
       end
     end
 
     context "when capture amount is equal to authorized_amount" do
-      before do
-        @capture_amount = 13.0
-      end
+      let(:capture_amount) { 13.0 }
 
       it "expects not to return false" do
         expect(capture_payment).to be_truthy
@@ -246,25 +238,23 @@ describe Spree::GiftCard, type: :model do
       it "expects to remove amount from authorization" do
         expect {
           capture_payment
-        }.to change { gift_card.authorized_amount }.by(-@capture_amount)
+        }.to change { gift_card.authorized_amount }.by(-capture_amount)
       end
 
       it "expects to remove amount from current_value" do
         expect {
           capture_payment
-        }.to change { gift_card.current_value }.by(-@capture_amount)
+        }.to change { gift_card.current_value }.by(-capture_amount)
       end
 
       it "expects to create a capture transaction for the given amount" do
         capture_payment
-        expect(gift_card.transactions.where(action: Spree::GiftCard::CAPTURE_ACTION, amount: @capture_amount, authorization_code: @auth_code).exists?).to be_truthy
+        expect(gift_card.transactions.where(action: Spree::GiftCard::CAPTURE_ACTION, amount: capture_amount, authorization_code: auth_code).exists?).to be_truthy
       end
     end
 
     context "when capture amount is greater than authorized_amount" do
-      before do
-        @capture_amount = 15.0
-      end
+      let(:capture_amount) { 15.0 }
 
       it "expects to return false" do
         expect(capture_payment).to be_falsey
@@ -284,15 +274,13 @@ describe Spree::GiftCard, type: :model do
 
       it "expects not to create a capture transaction for the given amount" do
         capture_payment
-        expect(gift_card.transactions.where(action: Spree::GiftCard::CAPTURE_ACTION, amount: @capture_amount, authorization_code: @auth_code).exists?).to be_falsey
+        expect(gift_card.transactions.where(action: Spree::GiftCard::CAPTURE_ACTION, amount: capture_amount, authorization_code: auth_code).exists?).to be_falsey
       end
     end
 
     context "when authorization_code is invalid" do
-      before do
-        @capture_amount = 10.0
-        @auth_code = @auth_code + "123"
-      end
+      let(:capture_amount) { 10.0 }
+      let(:auth_code) { super() + "123" }
 
       it "expects to return false" do
         expect(capture_payment).to be_falsey
@@ -312,7 +300,7 @@ describe Spree::GiftCard, type: :model do
 
       it "expects not to create a capture transaction for the given amount" do
         capture_payment
-        expect(gift_card.transactions.where(action: Spree::GiftCard::CAPTURE_ACTION, amount: @capture_amount, authorization_code: @auth_code).exists?).to be_falsey
+        expect(gift_card.transactions.where(action: Spree::GiftCard::CAPTURE_ACTION, amount: capture_amount, authorization_code: auth_code).exists?).to be_falsey
       end
     end
   end
@@ -320,15 +308,16 @@ describe Spree::GiftCard, type: :model do
   describe "void" do
     let(:variant) { create(:variant, price: 25) }
     let(:gift_card) { create(:gift_card, variant: variant) }
+    let(:authorized_amount) { 13.0 }
+    let(:auth_code) { gift_card.transactions.find_by(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: authorized_amount).authorization_code }
 
     def void_payment
-      gift_card.void(@auth_code)
+      gift_card.void(auth_code)
     end
 
     before do
-      @authorized_amount = 13.0
-      gift_card.authorize(@authorized_amount)
-      @auth_code = gift_card.transactions.find_by(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: @authorized_amount).authorization_code
+      gift_card.authorize(authorized_amount)
+      auth_code
     end
 
     context "when auth transaction present with auth code" do
@@ -339,19 +328,17 @@ describe Spree::GiftCard, type: :model do
       it "expects to remove amount from authorized_amount" do
         expect {
           void_payment
-        }.to change { gift_card.authorized_amount }.by(-@authorized_amount)
+        }.to change { gift_card.authorized_amount }.by(-authorized_amount)
       end
 
       it "expects to create a void transaction for the given amount" do
         void_payment
-        expect(gift_card.transactions.where(action: Spree::GiftCard::VOID_ACTION, amount: @authorized_amount, authorization_code: @auth_code).exists?).to be_truthy
+        expect(gift_card.transactions.where(action: Spree::GiftCard::VOID_ACTION, amount: authorized_amount, authorization_code: auth_code).exists?).to be_truthy
       end
     end
 
     context "when auth transaction not present with auth code" do
-      before do
-        @auth_code = @auth_code + "123"
-      end
+      let(:auth_code) { super() + "123" }
 
       it "expects to return false" do
         expect(void_payment).to be_falsey
@@ -365,7 +352,7 @@ describe Spree::GiftCard, type: :model do
 
       it "expects not to create a void transaction for the given amount" do
         void_payment
-        expect(gift_card.transactions.where(action: Spree::GiftCard::VOID_ACTION, amount: @authorized_amount, authorization_code: @auth_code).exists?).to be_falsey
+        expect(gift_card.transactions.where(action: Spree::GiftCard::VOID_ACTION, amount: authorized_amount, authorization_code: auth_code).exists?).to be_falsey
       end
     end
   end
@@ -374,15 +361,16 @@ describe Spree::GiftCard, type: :model do
     let(:variant) { create(:variant, price: 25) }
     let(:gift_card) { create(:gift_card, variant: variant) }
     let(:captured_amount) { 13.0 }
+    let(:auth_code) { gift_card.transactions.find_by(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: captured_amount).authorization_code }
 
     before do
       gift_card.authorize(captured_amount)
-      @auth_code = gift_card.transactions.find_by(action: Spree::GiftCard::AUTHORIZE_ACTION, amount: captured_amount).authorization_code
-      gift_card.capture(captured_amount, @auth_code)
+      auth_code
+      gift_card.capture(captured_amount, auth_code)
     end
 
     def credit_payment
-      gift_card.credit(credit_amount, @auth_code)
+      gift_card.credit(credit_amount, auth_code)
     end
 
     context "when credit amount is less than captured amount" do
@@ -400,7 +388,7 @@ describe Spree::GiftCard, type: :model do
 
       it "expects to create a credit transaction for the given amount" do
         credit_payment
-        expect(gift_card.transactions.where(action: Spree::GiftCard::CREDIT_ACTION, amount: credit_amount, authorization_code: @auth_code).exists?).to be_truthy
+        expect(gift_card.transactions.where(action: Spree::GiftCard::CREDIT_ACTION, amount: credit_amount, authorization_code: auth_code).exists?).to be_truthy
       end
     end
 
@@ -419,7 +407,7 @@ describe Spree::GiftCard, type: :model do
 
       it "expects to create a credit transaction for the given amount" do
         credit_payment
-        expect(gift_card.transactions.where(action: Spree::GiftCard::CREDIT_ACTION, amount: credit_amount, authorization_code: @auth_code).exists?).to be_truthy
+        expect(gift_card.transactions.where(action: Spree::GiftCard::CREDIT_ACTION, amount: credit_amount, authorization_code: auth_code).exists?).to be_truthy
       end
     end
 
@@ -438,16 +426,13 @@ describe Spree::GiftCard, type: :model do
 
       it "expects not to create a credit transaction for the given amount" do
         credit_payment
-        expect(gift_card.transactions.where(action: Spree::GiftCard::CREDIT_ACTION, amount: credit_amount, authorization_code: @auth_code).exists?).to be_falsey
+        expect(gift_card.transactions.where(action: Spree::GiftCard::CREDIT_ACTION, amount: credit_amount, authorization_code: auth_code).exists?).to be_falsey
       end
     end
 
     context "when authorization_code is invalid" do
       let(:credit_amount) { 10.0 }
-
-      before do
-        @auth_code = @auth_code + "123"
-      end
+      let(:auth_code) { super() + "123" }
 
       it "expects to return false" do
         expect(credit_payment).to be_falsey
@@ -461,7 +446,7 @@ describe Spree::GiftCard, type: :model do
 
       it "expects not to create a credit transaction for the given amount" do
         credit_payment
-        expect(gift_card.transactions.where(action: Spree::GiftCard::CREDIT_ACTION, amount: credit_amount, authorization_code: @auth_code).exists?).to be_falsey
+        expect(gift_card.transactions.where(action: Spree::GiftCard::CREDIT_ACTION, amount: credit_amount, authorization_code: auth_code).exists?).to be_falsey
       end
     end
   end

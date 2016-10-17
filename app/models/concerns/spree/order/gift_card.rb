@@ -10,7 +10,7 @@ module Spree
           payment_method = Spree::PaymentMethod::GiftCard.available.first
           raise "Gift Card payment method could not be found" unless payment_method
 
-          amount_to_take = gift_card_amount(gift_card, outstanding_balance - total_applied_store_credit)
+          amount_to_take = gift_card_amount(gift_card, outstanding_balance_after_applied_store_credit)
           create_gift_card_payment(payment_method, gift_card, amount_to_take)
         end
       end
@@ -68,6 +68,10 @@ module Spree
 
         def gift_card_amount(gift_card, total)
           [gift_card.amount_remaining, total].min
+        end
+
+        def outstanding_balance_after_applied_store_credit
+          outstanding_balance - total_applied_store_credit
         end
     end
   end

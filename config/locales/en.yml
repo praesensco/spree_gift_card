@@ -24,6 +24,7 @@ en:
       unable_to_find_for_action: "Could not find gift card for auth code: %{auth_code} for action: %{action}"
       unable_to_void: "Unable to void code: %{auth_code}"
       unable_to_credit: "Unable to credit code: %{auth_code}"
+    gift_card_redeemed: 'Gift card has been redeemed successfully.'
     gift_card_settings: 'Gift Card Settings'
     gift_cards: "Gift cards"
     gift_code: 'Gift Code'

@@ -33,16 +33,17 @@ SpreeGiftCard is an extension and one stop solution to integrate gift card funct
 3. Working
 ---
 
+* A gift card is created by default when you seed data. It can also be created using the steps below.
 * Admin can create `gift card` through
 
     `Admin -> Products -> New`
 
     while creating a new gift card, check `is gift card`, which means the product is gift card.
 * Once gift card is created, it is visible to customer.
+* One needs to add gift card shipping category to a shipping method to purchase a gift card.
 * When purchasing a gift card, a form is rendered to user, on which one can fill the `value`,`email`, `recipient name` and `note`. Once your order-payment is successfully captured, the gift card will be send to the email mentioned in gift card form.
 * The `Email` will contain details of gift card, amount, code, sender's email and note.
 * One can redeem the gift card by applying gift card code at payment step.
-* Besides, One can also add gift card shipment category and method, if gift card is meant for email delivery.
 
 Contributing
 ------------
