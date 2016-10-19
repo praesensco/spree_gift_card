@@ -21,7 +21,7 @@ module Spree
         ActiveMerchant::Billing::Response.new(false, Spree.t('gift_card_payment_method.unable_to_find'), {}, {})
       else
         action = -> (gift_card) do
-          gift_card.authorize(amount_in_cents / 100.0.to_d)
+          gift_card.authorize(amount_in_cents / 100.0.to_d, order_number: get_order_number(gateway_options))
         end
         handle_action_call(gift_card, action, :authorize)
       end
@@ -29,14 +29,14 @@ module Spree
 
     def capture(amount_in_cents, auth_code, gateway_options = {})
       action = -> (gift_card) do
-        gift_card.capture(amount_in_cents / 100.0.to_d, auth_code)
+        gift_card.capture(amount_in_cents / 100.0.to_d, auth_code, order_number: get_order_number(gateway_options))
       end
       handle_action(action, :capture, auth_code)
     end
 
     def void(auth_code, gateway_options = {})
       action = -> (gift_card) do
-        gift_card.void(auth_code)
+        gift_card.void(auth_code, order_number: get_order_number(gateway_options))
       end
       handle_action(action, :void, auth_code)
     end
@@ -47,7 +47,7 @@ module Spree
       else
         action = -> (gift_card) do
           purchase_amount = amount_in_cents / 100.0.to_d
-          (authorize_code = gift_card.authorize(purchase_amount)) && gift_card.capture(purchase_amount, authorize_code)
+          (authorize_code = gift_card.authorize(purchase_amount, order_number: get_order_number(gateway_options))) && gift_card.capture(purchase_amount, authorize_code, order_number: get_order_number(gateway_options))
         end
         handle_action_call(gift_card, action, :authorize)
       end
@@ -55,7 +55,7 @@ module Spree
 
     def credit(amount_in_cents, auth_code, gateway_options = {})
       action = -> (gift_card) do
-        gift_card.credit(amount_in_cents / 100.0.to_d, auth_code)
+        gift_card.credit(amount_in_cents / 100.0.to_d, auth_code, order_number: get_order_number(gateway_options))
       end
 
       handle_action(action, :credit, auth_code)
@@ -95,6 +95,10 @@ module Spree
       else
         handle_action_call(gift_card, action, action_name, auth_code)
       end
+    end
+
+    def get_order_number(gateway_options)
+      gateway_options[:order_id].split('-').first if gateway_options[:order_id]
     end
   end
 end

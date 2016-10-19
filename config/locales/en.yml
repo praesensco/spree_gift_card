@@ -26,6 +26,7 @@ en:
       unable_to_credit: "Unable to credit code: %{auth_code}"
     gift_card_redeemed: 'Gift card has been redeemed successfully.'
     gift_card_settings: 'Gift Card Settings'
+    gift_card_user: 'Gift Card User'
     gift_cards: "Gift cards"
     gift_code: 'Gift Code'
     gift_code_applied: 'Gift code has been successfully applied to your order.'

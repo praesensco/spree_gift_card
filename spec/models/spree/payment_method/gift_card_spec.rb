@@ -18,7 +18,10 @@ describe Spree::PaymentMethod::GiftCard do
       let(:auth_amount) { 10 }
 
       it 'declines an unknown gift card' do
-        expect(subject.success?).to be false
+        is_expected.to_not be_success
+      end
+
+      it 'adds unable_to_find message' do
         expect(subject.message).to include Spree.t('gift_card_payment_method.unable_to_find')
       end
     end
@@ -27,14 +30,20 @@ describe Spree::PaymentMethod::GiftCard do
       let(:auth_amount) { (gift_card.amount_remaining * 100) + 1 }
 
       it 'declines a gift card' do
-        expect(subject.success?).to be false
+        is_expected.to_not be_success
+      end
+
+      it 'adds insufficient_funds message' do
         expect(subject.message).to include Spree.t('gift_card_payment_method.insufficient_funds')
       end
     end
 
     context 'with a valid request' do
       it 'authorizes a valid gift card' do
-        expect(subject.success?).to be true
+        is_expected.to be_success
+      end
+
+      it 'adds a authorization code' do
         expect(subject.authorization).to_not be_nil
       end
     end
@@ -56,7 +65,10 @@ describe Spree::PaymentMethod::GiftCard do
       let(:auth_code) { -1 }
 
       it 'declines an unknown gift card' do
-        expect(subject.success?).to be false
+        is_expected.to_not be_success
+      end
+
+      it 'adds unable_to_find message' do
         expect(subject.message).to include Spree.t('gift_card_payment_method.unable_to_find')
       end
     end
@@ -65,20 +77,26 @@ describe Spree::PaymentMethod::GiftCard do
       let(:authorized_amount) { (capture_amount - 1) / 100 }
 
       before do
-        allow_any_instance_of(Spree::GiftCard).to receive_messages(authorize: true)
+        allow_any_instance_of(Spree::GiftCard).to receive(:authorize).and_return(true)
       end
 
       it 'declines a gift card' do
-        expect(subject.success?).to be false
+        is_expected.to_not be_success
+      end
+
+      it 'adds insufficient_authorized_amount message' do
         expect(subject.message).to include Spree.t('gift_card_payment_method.insufficient_authorized_amount')
       end
     end
 
     context 'with a valid request' do
       it 'captures the gift card' do
+        is_expected.to be_success
+      end
+
+      it 'adds successful_action capture message' do
         expect(subject.message).to include Spree.t('gift_card_payment_method.successful_action',
                                                    action: Spree::GiftCard::CAPTURE_ACTION)
-        expect(subject.success?).to be true
       end
     end
   end
@@ -95,7 +113,10 @@ describe Spree::PaymentMethod::GiftCard do
       let(:auth_code) { 1 }
 
       it 'declines an unknown gift card' do
-        expect(subject.success?).to be false
+        is_expected.to_not be_success
+      end
+
+      it 'adds unable_to_find message' do
         expect(subject.message).to include Spree.t('gift_card_payment_method.unable_to_find')
       end
     end
@@ -104,12 +125,15 @@ describe Spree::PaymentMethod::GiftCard do
       before { allow_any_instance_of(Spree::GiftCard).to receive(:void).and_return false }
 
       it 'returns an error response' do
-        expect(subject.success?).to be false
+        is_expected.to_not be_success
       end
     end
 
-    it 'voids a valid gift card void request' do
-      expect(subject.success?).to be true
+    it 'voids the gift card' do
+      is_expected.to be_success
+    end
+
+    it 'adds successful_action void message' do
       expect(subject.message).to include Spree.t('gift_card_payment_method.successful_action',
                                                  action: Spree::GiftCard::VOID_ACTION)
     end
@@ -128,7 +152,10 @@ describe Spree::PaymentMethod::GiftCard do
       let(:auth_amount) { 10 }
 
       it 'declines an unknown gift card' do
-        expect(subject.success?).to be false
+        is_expected.to_not be_success
+      end
+
+      it 'adds unable_to_find message' do
         expect(subject.message).to include Spree.t('gift_card_payment_method.unable_to_find')
       end
     end
@@ -137,14 +164,20 @@ describe Spree::PaymentMethod::GiftCard do
       let(:auth_amount) { (gift_card.amount_remaining * 100) + 1 }
 
       it 'declines a gift card' do
-        expect(subject.success?).to be false
+        is_expected.to_not be_success
+      end
+
+      it 'adds insufficient_funds message' do
         expect(subject.message).to include Spree.t('gift_card_payment_method.insufficient_funds')
       end
     end
 
     context 'with a valid request' do
       it 'purchases a valid gift card purchase request' do
-        expect(subject.success?).to be true
+        is_expected.to be_success
+      end
+
+      it 'adds a authorization code' do
         expect(subject.authorization).to_not be_nil
       end
     end
@@ -164,7 +197,10 @@ describe Spree::PaymentMethod::GiftCard do
       let(:auth_code) { -1 }
 
       it 'declines an unknown gift card' do
-        expect(subject.success?).to be false
+        is_expected.to_not be_success
+      end
+
+      it 'adds unable_to_find message' do
         expect(subject.message).to include Spree.t('gift_card_payment_method.unable_to_find')
       end
     end
@@ -173,14 +209,20 @@ describe Spree::PaymentMethod::GiftCard do
       let(:credit_amount) { (gift_card.authorized_amount * 100) + 1 }
 
       it 'declines a gift card' do
-        expect(subject.success?).to be false
+        is_expected.to_not be_success
+      end
+
+      it 'adds unable_to_credit message' do
         expect(subject.message).to include Spree.t('gift_card_payment_method.unable_to_credit', auth_code: auth_code)
       end
     end
 
     context 'with a valid request' do
       it 'credits a valid gift card credit request' do
-        expect(subject.success?).to be true
+        is_expected.to be_success
+      end
+
+      it 'adds a authorization code' do
         expect(subject.authorization).to_not be_nil
       end
     end

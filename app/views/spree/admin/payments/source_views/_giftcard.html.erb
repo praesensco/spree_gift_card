@@ -1,0 +1,13 @@
+<fieldset data-hook="credit_card">
+  <legend><%= Spree.t(:gift_card) %></legend>
+  <table class="table table-condensed table-bordered">
+    <tr>
+      <th width="20%"><%= Spree.t(:gift_card_user) %>:</th>
+      <td><%= payment.source.name %></td>
+    </tr>
+    <tr>
+      <th><%= Spree.t(:email) %>:</th>
+      <td><%= payment.source.email %></td>
+    </tr>
+  </table>
+</fieldset>
