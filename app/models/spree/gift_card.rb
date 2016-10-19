@@ -59,6 +59,7 @@ module Spree
 
       if valid_authorization?(amount)
         transaction = self.transactions.build(action: AUTHORIZE_ACTION, amount: amount, authorization_code: authorization_code)
+        transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
         self.authorized_amount = self.authorized_amount + amount
         self.save!
         authorization_code
@@ -81,6 +82,7 @@ module Spree
 
       if amount <= authorized_amount
         transaction = self.transactions.build(action: CAPTURE_ACTION, amount: amount, authorization_code: authorization_code)
+        transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
         self.authorized_amount = self.authorized_amount - amount
         self.current_value = self.current_value - amount
         self.save!
@@ -95,6 +97,7 @@ module Spree
       if auth_transaction = transactions.find_by(action: AUTHORIZE_ACTION, authorization_code: authorization_code)
         amount = auth_transaction.amount
         transaction = self.transactions.build(action: VOID_ACTION, amount: amount, authorization_code: authorization_code)
+        transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
         self.authorized_amount = self.authorized_amount - amount
         self.save!
         true
@@ -108,6 +111,7 @@ module Spree
       capture_transaction = transactions.find_by(action: CAPTURE_ACTION, authorization_code: authorization_code)
       if capture_transaction && amount <= capture_transaction.amount
         transaction = self.transactions.build(action: CREDIT_ACTION, amount: amount, authorization_code: authorization_code)
+        transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
         self.current_value = self.current_value + amount
         self.save!
         true
@@ -154,6 +158,22 @@ module Spree
       "#{id}-GC-#{Time.now.utc.strftime('%Y%m%d%H%M%S%6N')}"
     end
 
+    def can_void?(payment)
+      payment.pending?
+    end
+
+    def can_capture?(payment)
+      ['checkout', 'pending'].include?(payment.state)
+    end
+
+    def can_void?(payment)
+      payment.pending?
+    end
+
+    def can_capture?(payment)
+      ['checkout', 'pending'].include?(payment.state)
+    end
+
     private
 
     def redeem(user)
@@ -191,8 +211,8 @@ module Spree
     end
 
     def set_values
-      self.current_value  = self.variant.try(:price) unless current_value
-      self.original_value = self.variant.try(:price) unless original_value
+      self.current_value ||= self.variant.try(:price)
+      self.original_value ||= self.variant.try(:price)
     end
 
     def amount_remaining_is_positive
