@@ -166,14 +166,6 @@ module Spree
       ['checkout', 'pending'].include?(payment.state)
     end
 
-    def can_void?(payment)
-      payment.pending?
-    end
-
-    def can_capture?(payment)
-      ['checkout', 'pending'].include?(payment.state)
-    end
-
     private
 
     def redeem(user)
