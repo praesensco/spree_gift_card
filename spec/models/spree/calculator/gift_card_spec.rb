@@ -12,21 +12,21 @@ describe Spree::Calculator::GiftCardCalculator, type: :model do
 
   describe '#compute' do
     context 'when current value of gift_card is 0' do
-      before { allow(gift_card).to receive_messages current_value: 0 }
+      before { allow(gift_card).to receive(:current_value).and_return(0) }
       it "should compute 0 if current value is 0" do
         expect(calculator.compute(order, gift_card)).to eql 0
       end
     end
 
     context 'when order total less than current value' do
-      before { allow(gift_card).to receive_messages current_value: 120 }
+      before { allow(gift_card).to receive(:current_value).and_return(120) }
       it "should compute 0 if current value is 0" do
         expect(calculator.compute(order, gift_card)).to eql -100
       end
     end
 
     context 'when order total greater than current value' do
-      before { allow(order).to receive_messages total: 125 }
+      before { allow(order).to receive(:total).and_return(125) }
       it "should compute 0 if current value is 0" do
         expect(calculator.compute(order, gift_card)).to eql -25
       end

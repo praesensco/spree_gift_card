@@ -36,9 +36,15 @@ describe 'Order' do
         order.reload
       end
 
-      it 'creates a gift_card payment for the full amount' do
+      it 'creates a single payment' do
         expect(order.payments.count).to eq 1
+      end
+
+      it 'creates a gift_card payment' do
         expect(order.payments.first).to be_gift_card
+      end
+
+      it 'creates a payment for the full amount' do
         expect(order.payments.first.amount).to eq order_total
       end
     end
@@ -57,9 +63,15 @@ describe 'Order' do
         order.reload
       end
 
-      it 'creates a gift card payment for the available amount' do
+      it 'creates a single payment' do
         expect(order.payments.count).to eq 1
+      end
+
+      it 'creates a gift_card payment' do
         expect(order.payments.first).to be_gift_card
+      end
+
+      it 'creates a payment for the available amount' do
         expect(order.payments.first.amount).to eq gift_card_total
       end
     end
