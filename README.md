@@ -44,6 +44,7 @@ SpreeGiftCard is an extension and one stop solution to integrate gift card funct
 * The `Email` will contain details of gift card, amount, code, sender's email and note.
 * One can redeem the gift card by applying gift card code at payment step.
 
+**Here is a detailed article with screenshot http://vinsol.com/spreecommerce-gift-card**
 Contributing
 ------------
 
