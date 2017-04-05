@@ -1,21 +1,8 @@
 Spree::OrderContents.class_eval do
+  def grab_line_item_by_variant_with_gift_card(variant, raise_error = false, options = {})
+    return if variant.product.is_gift_card?
 
-  alias_method :orig_grab_line_item_by_variant, :grab_line_item_by_variant
-
-  def grab_line_item_by_variant(variant, raise_error = false, args = {})
-    raise_error = args[0] || false
-
-    if variant.product.is_gift_card?
-      line_item = nil
-    else
-      line_item = order.find_line_item_by_variant(variant)
-    end
-
-    if !line_item.present? && raise_error
-      raise ActiveRecord::RecordNotFound, "Line item not found for variant #{variant.sku}"
-    end
-
-    line_item
+    grab_line_item_by_variant_without_gift_card(variant, raise_error, options)
   end
-
+  alias_method_chain :grab_line_item_by_variant, :gift_card
 end
