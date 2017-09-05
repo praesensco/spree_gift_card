@@ -1,6 +1,6 @@
 Spree::ProductsController.class_eval do
 
-  before_filter :redirect_gift_card, only: :show
+  before_action :redirect_gift_card, only: :show
 
   private
 
