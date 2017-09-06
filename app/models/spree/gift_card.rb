@@ -15,7 +15,7 @@ module Spree
 
     has_many :transactions, class_name: 'Spree::GiftCardTransaction'
 
-    validates :current_value, :name, :original_value, :code, :email, presence: true
+    validates :current_value, :original_value, :code, presence: true
 
     with_options allow_blank: true do
       validates :code, uniqueness: { case_sensitive: false }
@@ -23,10 +23,16 @@ module Spree
       validates :email, email: true
     end
 
+    validates :email, :name, :sender_name, :sender_email, presence: true, if: :e_gift_card?
+
     validate :amount_remaining_is_positive, if: :current_value
 
     before_validation :generate_code, on: :create
     before_validation :set_values, on: :create
+
+    def e_gift_card?
+      variant.product.is_e_gift_card?
+    end
 
     def safely_redeem(user)
       if able_to_redeem?(user)
@@ -198,7 +204,8 @@ module Spree
 
     def generate_code
       until self.code.present? && self.class.where(code: self.code).count == 0
-        self.code = Digest::SHA1.hexdigest([Time.now, rand].join)
+        chars = [('a'..'z'), ('0'..'9')].map(&:to_a).flatten
+        self.code = Array.new(16) { chars[rand(chars.count)] }.join
       end
     end
 

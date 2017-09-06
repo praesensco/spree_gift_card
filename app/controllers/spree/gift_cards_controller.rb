@@ -13,6 +13,7 @@ module Spree
     end
 
     def new
+      @is_e_gift_card = !params[:e].blank?
       find_gift_card_variants
       @gift_card = GiftCard.new
     end
@@ -60,12 +61,18 @@ module Spree
     end
 
     def find_gift_card_variants
-      gift_card_product_ids = Product.not_deleted.where(is_gift_card: true).pluck(:id)
+      products = Product.not_deleted.gift_cards
+      if @is_e_gift_card
+        products = products.e_gift_cards
+      else
+        products = products.not_e_gift_cards 
+      end
+      gift_card_product_ids = products.pluck(:id)
       @gift_card_variants = Variant.joins(:prices).where(["amount > 0 AND product_id IN (?)", gift_card_product_ids]).order("amount")
     end
 
     def gift_card_params
-      params.require(:gift_card).permit(:email, :name, :note, :variant_id)
+      params.require(:gift_card).permit(:email, :name, :note, :variant_id, :sender_name, :sender_email, :delivery_on)
     end
 
     def load_master_variant
