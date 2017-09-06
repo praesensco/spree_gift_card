@@ -3,7 +3,7 @@ class CreateSpreeGiftCards < ActiveRecord::Migration
     create_table :spree_gift_cards do |t|
       t.integer :variant_id, :null => false
       t.integer :line_item_id
-      t.string :email, :null => false
+      t.string :email
       t.string :name
       t.text :note
       t.string :code, :null => false
