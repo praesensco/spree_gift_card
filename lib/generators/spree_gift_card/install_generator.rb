@@ -15,9 +15,7 @@ module SpreeGiftCard
       def add_schedule
         create_file 'config/schedule.rb' unless File.exist?('config/schedule.rb')
         append_file 'config/schedule.rb' do
-          "\nevery 1.day, at: '9:00 am' do
-            runner 'SpreeGiftCard::SentEmailJob.perform_later'
-          end"
+          "\nevery 1.day, at: '9:00 am' do\n  runner 'SpreeGiftCard::SentEmailJob.perform_later'\nend\n"
         end
       end
 
