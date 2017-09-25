@@ -30,6 +30,10 @@ module Spree
     before_validation :generate_code, on: :create
     before_validation :set_values, on: :create
 
+    scope :active, -> { where(active: true) }
+    scope :inactive, -> { where(active: false) }
+    scope :has_springboard_id, -> { where.not(springboard_id: nil) }
+
     def e_gift_card?
       variant.product.is_e_gift_card?
     end

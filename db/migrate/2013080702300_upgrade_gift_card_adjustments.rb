@@ -1,4 +1,4 @@
-class UpgradeGiftCardAdjustments < ActiveRecord::Migration
+class UpgradeGiftCardAdjustments < ActiveRecord::Migration[4.2]
   def up
     if ActiveRecord::Base.connection.column_exists?(:spree_adjustments, :originator_type)
 
