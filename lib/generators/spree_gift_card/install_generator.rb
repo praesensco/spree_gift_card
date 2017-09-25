@@ -12,6 +12,15 @@ module SpreeGiftCard
         inject_into_file "vendor/assets/stylesheets/spree/backend/all.css", " *= require spree/backend/spree_gift_card\n", :before => /\*\//, :verbose => true
       end
 
+      def add_schedule
+        create_file 'config/schedule.rb' unless File.exist?('config/schedule.rb')
+        append_file 'config/schedule.rb' do
+          "\nevery 1.day, at: '9:00 am' do
+            runner 'SpreeGiftCard::SentEmailJob.perform_later'
+          end"
+        end
+      end
+
       def add_migrations
         run 'rake railties:install:migrations FROM=spree_gift_card'
       end
