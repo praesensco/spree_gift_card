@@ -4,6 +4,12 @@ Spree::OrderMailer.class_eval do
     @order = Spree::Order.find_by(id: order_id)
     subject = "#{Spree::Store.current.name} #{Spree.t('gift_card_email.subject')}"
     @gift_card.update_attribute(:sent_at, Time.now)
-    mail(to: @gift_card.email, from: from_address, subject: subject)
+
+    mail(
+      to: @gift_card.email,
+      from: "#{@gift_card.sender_name} <#{from_address}>",
+      reply_to: "#{@gift_card.sender_name} <#{@gift_card.sender_email}>",
+      subject: subject
+    )
   end
 end
