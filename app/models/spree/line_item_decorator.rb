@@ -1,5 +1,4 @@
 Spree::LineItem.class_eval do
-
   has_one :gift_card, dependent: :destroy
 
   MAXIMUM_GIFT_CARD_LIMIT ||= 1

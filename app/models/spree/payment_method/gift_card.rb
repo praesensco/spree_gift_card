@@ -5,7 +5,7 @@ module Spree
     end
 
     def actions
-      %w{capture void}
+      %w[capture void]
     end
 
     def can_void?(payment)
@@ -13,7 +13,7 @@ module Spree
     end
 
     def can_capture?(payment)
-      ['checkout', 'pending'].include?(payment.state)
+      %w[checkout pending].include?(payment.state)
     end
 
     def authorize(amount_in_cents, gift_card, gateway_options = {})
@@ -69,7 +69,8 @@ module Spree
 
     def handle_action_call(gift_card, action, action_name, auth_code = nil)
       gift_card.with_lock do
-        if response = action.call(gift_card)
+        response = action.call(gift_card)
+        if response
           ActiveMerchant::Billing::Response.new(
             true,
             Spree.t('gift_card_payment_method.successful_action', action: action_name),

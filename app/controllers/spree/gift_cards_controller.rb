@@ -1,6 +1,5 @@
 module Spree
   class GiftCardsController < Spree::StoreController
-
     before_action :load_master_variant, only: :new
     before_action :load_gift_card, only: :redeem
 
@@ -13,9 +12,14 @@ module Spree
     end
 
     def new
-      @is_e_gift_card = !params[:e].blank?
+      @is_e_gift_card = request.path.include?('e-gift-card')
       find_gift_card_variants
       @gift_card = GiftCard.new
+      if @is_e_gift_card
+        render :e_gift_card
+      else
+        render :gift_card
+      end
     end
 
     def create
@@ -62,11 +66,11 @@ module Spree
 
     def find_gift_card_variants
       products = Product.not_deleted.gift_cards
-      if @is_e_gift_card
-        products = products.e_gift_cards
-      else
-        products = products.not_e_gift_cards 
-      end
+      products = if @is_e_gift_card
+                   products.e_gift_cards
+                 else
+                   products.not_e_gift_cards
+                 end
       gift_card_product_ids = products.pluck(:id)
       @gift_card_variants = Variant.joins(:prices).where(["amount > 0 AND product_id IN (?)", gift_card_product_ids]).order("amount")
     end
