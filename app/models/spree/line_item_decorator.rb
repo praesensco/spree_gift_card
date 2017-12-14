@@ -10,5 +10,4 @@ Spree::LineItem.class_eval do
 
   delegate :is_gift_card?, to: :product
   delegate :is_e_gift_card?, to: :product
-
 end

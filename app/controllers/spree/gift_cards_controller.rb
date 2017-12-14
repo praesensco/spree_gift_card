@@ -82,6 +82,5 @@ module Spree
     def load_master_variant
       @master_variant = Spree::Product.find_by(slug: params[:product_id]).try(:master)
     end
-
   end
 end
