@@ -24,6 +24,7 @@ module Spree
     end
 
     validates :email, :name, :sender_name, :sender_email, presence: true, if: :e_gift_card?
+    validates :email, email: true, if: :e_gift_card?
 
     validate :amount_remaining_is_positive, if: :current_value
 
@@ -209,8 +210,8 @@ module Spree
     end
 
     def set_values
-      self.current_value ||= variant.try(:price)
-      self.original_value ||= variant.try(:price)
+      self.current_value ||= line_item.try(:price)
+      self.original_value ||= line_item.try(:price)
     end
 
     def amount_remaining_is_positive

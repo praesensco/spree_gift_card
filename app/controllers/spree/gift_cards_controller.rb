@@ -71,6 +71,7 @@ module Spree
                  else
                    products.not_e_gift_cards
                  end
+      @gift_card_variant_id = products.first.master.id
       gift_card_product_ids = products.pluck(:id)
       @gift_card_variants = Variant.joins(:prices).where(["amount > 0 AND product_id IN (?)", gift_card_product_ids]).order("amount")
     end
