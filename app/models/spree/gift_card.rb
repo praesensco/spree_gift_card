@@ -23,8 +23,8 @@ module Spree
       validates :email, email: true
     end
 
-    validates :email, :name, :sender_name, :sender_email, presence: true, if: :e_gift_card?
-    validates :email, email: true, if: :e_gift_card?
+    validates :email, :name, :sender_name, :sender_email, :note, presence: true, if: :e_gift_card?
+    validates :sender_email, email: true, if: :e_gift_card?
 
     validate :amount_remaining_is_positive, if: :current_value
 
