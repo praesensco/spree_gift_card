@@ -9,6 +9,5 @@ module Spree
     def compute(order, gift_card)
       [order.total, gift_card.current_value].min * -1
     end
-
   end
 end

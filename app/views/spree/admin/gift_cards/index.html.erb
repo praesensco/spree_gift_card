@@ -3,7 +3,8 @@
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:new_gift_card), new_object_url, icon: 'plus', class: 'btn btn-success' %>
+  <%= button_link_to Spree.t(:new_gift_card), gift_card_new_admin_gift_cards_path, icon: 'plus', class: 'btn btn-success' %>
+  <%= button_link_to Spree.t(:new_e_gift_card), e_gift_card_new_admin_gift_cards_path, icon: 'plus', class: 'btn btn-success' %>
 <% end %>
 
 <% content_for :table_filter_title do %>
@@ -16,8 +17,11 @@
       <th><%= Spree.t(:code) %></th>
       <th><%= Spree.t(:original_value) %></th>
       <th><%= Spree.t(:current_value) %></th>
+      <th><%= Spree.t(:is_e_gift_card) %></th>
       <th><%= Spree.t(:email) %></th>
       <th><%= Spree.t(:name) %></th>
+      <th><%= Spree.t(:sender_email) %></th>
+      <th><%= Spree.t(:sender_name) %></th>
       <th><%= Spree.t(:note) %></th>
       <th class="actions" width="100"></th>
     </tr>
@@ -28,8 +32,11 @@
         <td><%= card.code %></td>
         <td><%= number_to_currency card.original_value %></td>
         <td><%= number_to_currency card.current_value %></td>
+        <td><%= card.variant.product.is_e_gift_card %></td>
         <td><%= card.email %></td>
         <td><%= card.name %></td>
+        <td><%= card.sender_email %></td>
+        <td><%= card.sender_name %></td>
         <td><%= card.note %></td>
         <td class="actions">
           <%= link_to_edit card, no_text: true if can?(:edit, card) %>

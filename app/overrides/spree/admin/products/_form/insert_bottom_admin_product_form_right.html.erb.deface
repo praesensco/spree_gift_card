@@ -4,3 +4,6 @@
 <p>
   <%= f.check_box(:is_gift_card) %> <%= f.label :is_gift_card, Spree.t("is_gift_card")%>
 </p>
+<p>
+  <%= f.check_box(:is_e_gift_card) %> <%= f.label :is_e_gift_card, Spree.t("is_e_gift_card")%>
+</p>

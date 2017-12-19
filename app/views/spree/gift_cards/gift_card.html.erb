@@ -8,19 +8,6 @@
         <span class="required">*</span><br/>
         <%= f.select :variant_id, variants_values(@gift_card_variants), { selected: @variant.try(:id) }, class: 'form-control' %>
       </fieldset>
-
-      <fieldset class="form-group">
-        <%= f.label :email, Spree.t("email") %>
-        <span class="required">*</span><br/>
-        <%= f.text_field :email, class: 'form-control' %>
-      </fieldset>
-
-      <fieldset class="form-group">
-        <%= f.label :name, Spree.t("recipient_name") %>
-        <span class="required">*</span><br/>
-        <%= f.text_field :name, class: 'form-control' %>
-      </fieldset>
-
       <fieldset class="form-group">
         <%= f.label :note, Spree.t("note") %><br/>
         <%= f.text_area :note, rows: 6, class: 'form-control' %>
