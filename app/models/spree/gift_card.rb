@@ -9,6 +9,7 @@ module Spree
     CAPTURE_ACTION = 'capture'.freeze
     VOID_ACTION = 'void'.freeze
     CREDIT_ACTION = 'credit'.freeze
+    VALUES = [50, 100, 150, 200, 250, 300, 500, 1000].freeze
 
     belongs_to :variant
     belongs_to :line_item
