@@ -8,10 +8,11 @@ Spree::Payment.class_eval do
   end
 
   private
-    def invalidate_old_payments
-      return if store_credit_or_gift_card?
-      order.payments.with_state('checkout').where("id != ?", self.id).each do |payment|
-        payment.invalidate! unless payment.store_credit_or_gift_card?
-      end
+
+  def invalidate_old_payments
+    return if store_credit_or_gift_card?
+    order.payments.with_state('checkout').where("id != ?", id).each do |payment|
+      payment.invalidate! unless payment.store_credit_or_gift_card?
     end
+  end
 end

@@ -1,5 +1,4 @@
 Spree::LineItem.class_eval do
-
   has_one :gift_card, dependent: :destroy
 
   MAXIMUM_GIFT_CARD_LIMIT ||= 1
@@ -11,5 +10,4 @@ Spree::LineItem.class_eval do
 
   delegate :is_gift_card?, to: :product
   delegate :is_e_gift_card?, to: :product
-
 end
