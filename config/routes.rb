@@ -4,6 +4,8 @@ Spree::Core::Engine.routes.draw do
       get :redeem
     end
   end
+  resources :user_gift_cards, only: %i[create index new]
+
   get 'gift-card' => 'gift_cards#new', as: 'gift-card-new'
   get 'e-gift-card' => 'gift_cards#new', as: 'e-gift-card-new'
 

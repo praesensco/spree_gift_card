@@ -1,9 +1,9 @@
 module SpreeGiftCard
-  class SentEmailJob < ApplicationJob
+  class SendEmailJob < ApplicationJob
     queue_as :default
 
     def perform(*_args)
-      gift_cards = Spree::GiftCard.active.has_springboard_id.where.not(delivery_on: nil).where(sent_at: nil)
+      gift_cards = Spree::GiftCard.active.where.not(delivery_on: nil).where(sent_at: nil)
       gift_cards = gift_cards.map do |gift_card|
         gift_card if gift_card.delivery_on.to_date <= DateTime.now.to_date
       end.reject(&:blank?)

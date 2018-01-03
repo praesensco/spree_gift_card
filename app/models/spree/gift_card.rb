@@ -3,6 +3,7 @@ require 'spree/core/validators/email'
 module Spree
   class GiftCard < ActiveRecord::Base
     include CalculatedAdjustments
+    include Spree::GiftCard::Users
 
     UNACTIVATABLE_ORDER_STATES = %w[complete awaiting_return returned].freeze
     AUTHORIZE_ACTION = 'authorize'.freeze
@@ -34,7 +35,6 @@ module Spree
 
     scope :active, -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
-    scope :has_springboard_id, -> { where.not(springboard_id: nil) }
 
     def e_gift_card?
       variant.product.is_e_gift_card?
