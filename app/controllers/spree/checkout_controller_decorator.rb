@@ -5,6 +5,9 @@ Spree::CheckoutController.class_eval do
   private
 
   def add_gift_card_payments
+    if spree_current_user.present? && !spree_current_user.gift_cards.include?(@gift_card)
+      spree_current_user.gift_cards << @gift_card
+    end
     @order.add_gift_card_payments(@gift_card)
 
     # Remove other payment method parameters.
@@ -23,13 +26,23 @@ Spree::CheckoutController.class_eval do
 
   def load_gift_card
     @gift_card = Spree::GiftCard.find_by(code: params[:payment_source][gift_card_payment_method.try(:id).to_s][:code])
-
-    unless @gift_card
-      redirect_to checkout_state_path(@order.state), flash: { error: Spree.t('gift_code_not_found') } and return
+    if @gift_card.nil?
+      @gift_card = import_integrated_gift_card
+    else
+      sync_integrated_gift_card(@gift_card)
     end
+
+    return if @gift_card
+    redirect_to checkout_state_path(@order.state), flash: { error: Spree.t('gift_code_not_found') } and return
   end
 
   def gift_card_payment_method
     @gift_card_payment_method ||= Spree::PaymentMethod.gift_card.available.first
+  end
+
+  def import_integrated_gift_card; end
+
+  def sync_integrated_gift_card(_gift_card)
+    true
   end
 end
