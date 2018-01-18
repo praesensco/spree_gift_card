@@ -20,8 +20,8 @@ module Spree
       if gift_card.nil?
         ActiveMerchant::Billing::Response.new(false, Spree.t('gift_card_payment_method.unable_to_find'), {}, {})
       else
-        sync_integrated_gift_card(gift_card)
         action = -> (gift_card) do
+          sync_integrated_gift_card(gift_card)
           gift_card.authorize(amount_in_cents / 100.0.to_d, order_number: get_order_number(gateway_options))
         end
         handle_action_call(gift_card, action, :authorize)
@@ -29,8 +29,8 @@ module Spree
     end
 
     def capture(amount_in_cents, auth_code, gateway_options = {})
-      sync_integrated_gift_card(gift_card)
       action = -> (gift_card) do
+        sync_integrated_gift_card(gift_card)
         gift_card.capture(amount_in_cents / 100.0.to_d, auth_code, order_number: get_order_number(gateway_options))
       end
       handle_action(action, :capture, auth_code)
@@ -47,7 +47,6 @@ module Spree
       if gift_card.nil?
         ActiveMerchant::Billing::Response.new(false, Spree.t('gift_card_payment_method.unable_to_find'), {}, {})
       else
-        sync_integrated_gift_card(gift_card)
         action = -> (gift_card) do
           purchase_amount = amount_in_cents / 100.0.to_d
           (authorize_code = gift_card.authorize(purchase_amount, order_number: get_order_number(gateway_options))) && gift_card.capture(purchase_amount, authorize_code, order_number: get_order_number(gateway_options))
@@ -57,8 +56,8 @@ module Spree
     end
 
     def credit(amount_in_cents, auth_code, gateway_options = {})
-      sync_integrated_gift_card(gift_card)
       action = -> (gift_card) do
+        sync_integrated_gift_card(gift_card)
         gift_card.credit(amount_in_cents / 100.0.to_d, auth_code, order_number: get_order_number(gateway_options))
       end
 
