@@ -11,7 +11,7 @@ module Spree
 
       # Check if GC is defined in Spree
       gift_card = Spree::GiftCard.find_by_code(code)
-      if spree_gift_card.present?
+      if gift_card.present?
         spree_current_user.gift_cards << gift_card
         flash[:success] = 'Gift Card added'
         # If GC is not defined in Spree, check if it is defined in integrated services
