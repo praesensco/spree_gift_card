@@ -205,7 +205,7 @@ module Spree
 
     def generate_code
       until code.present? && self.class.where(code: code).count.zero?
-        chars = [('a'..'z'), ('0'..'9')].map(&:to_a).flatten
+        chars = [('A'..'Z'), ('0'..'9')].map(&:to_a).flatten
         self.code = Array.new(16) { chars[rand(chars.count)] }.join
       end
     end
