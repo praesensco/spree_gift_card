@@ -1,6 +1,6 @@
 module Spree
   class UserGiftCardsController < Spree::StoreController
-    load_and_authorize_resource class: Spree::GiftCard
+    before_action :authorize
 
     def create
       code = params[:code]
@@ -30,6 +30,10 @@ module Spree
     def new; end
 
     private
+
+    def authorize
+      redirect_to root_path unless spree_current_user.present?
+    end
 
     def import_integrated_gift_card; end
   end
