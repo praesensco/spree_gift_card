@@ -9,7 +9,7 @@ module SpreeGiftCard
       end.reject(&:blank?)
       gift_cards.each do |gift_card|
         if gift_card.line_item.is_e_gift_card?
-          Spree::OrderMailer.gift_card_email(gift_card.id, gift_card.line_item.order).deliver
+          Spree::OrderMailer.gift_card_email(gift_card.id, gift_card.line_item.order).deliver_later
         end
       end
     end

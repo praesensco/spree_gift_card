@@ -15,7 +15,13 @@ Spree::CheckoutController.class_eval do
     params.delete(:payment_source)
 
     # Return to the Payments page if additional payment is needed.
-    redirect_to checkout_state_path(@order.state) and return if @order.payments.valid.sum(:amount) < @order.total
+    if @order.payments.valid.sum(:amount) < @order.total
+      redirect_to checkout_state_path(@order.state)
+      flash[:success] = Spree.t('gift_card_added_partial')
+      return
+    else
+      flash[:success] = Spree.t('gift_card_added')
+    end
   end
 
   def payment_via_gift_card?
