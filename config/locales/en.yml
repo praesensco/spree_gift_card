@@ -11,6 +11,8 @@ en:
         unauthorized: 'You are not authorized to perform this action.'
         already_redeemed: 'Gift Card has already been redeemed.'
     gift_card: 'Gift Card'
+    gift_card_added: Gift Card Added
+    gift_card_added_partial: Gift Card Added, Please add another payment method for the remaining amount
     gift_card_calculator: 'Gift Card Calculator'
     gift_card_discount: 'Gift Card Discount'
     gift_card_email:

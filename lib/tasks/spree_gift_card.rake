@@ -4,5 +4,10 @@ namespace :spree do
     task send_emails: :environment do
       SpreeGiftCard::SendEmailJob.perform_now
     end
+
+    desc 'Schedule: Send GiftCard Emails'
+    task schedule_send_emails: :environment do
+      SpreeGiftCard::SendEmailJob.perform_later
+    end
   end
 end
