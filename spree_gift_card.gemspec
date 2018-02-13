@@ -5,9 +5,9 @@ Gem::Specification.new do |s|
   s.summary     = 'Spree Gift Card'
   s.description = 'Spree Gift Card Extension'
 
-  s.authors     = ['Jeff Dutil']
-  s.email       = ['jdutil@burlingtonwebapps.com']
-  s.homepage    = 'https://github.com/vinsol/spree_gift_card'
+  s.authors     = ['Wojtek']
+  s.email       = ['wojtek@praesens.co']
+  s.homepage    = 'https://github.com/praesensco/spree_gift_card'
 
   spree_version = '~> 3.3.0'
 

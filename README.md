@@ -12,23 +12,23 @@ SpreeGiftCard is an extension and one stop solution to integrate gift card funct
 ## Installation
 
 1. Just add this line to your `Gemfile`:
-  ```ruby
-  gem 'spree_gift_card',           github: 'vinsol/spree_gift_card',   branch: 'x-x-stable'
-  ```
+```ruby
+gem 'spree_gift_card', github: 'praesensco/spree_gift_card'
+```
 
 2. Execute the following commands in respective order:
 
-   ```ruby
-    bundle install
-    ```
+```ruby
+bundle install
+```
 
-   ```ruby
-    rails g spree_gift_card:install
-    ```
-    seed the default data with:
-   ```ruby
-    rails g spree_gift_card:seed
-    ```
+```ruby
+rails g spree_gift_card:install
+```
+seed the default data with:
+```ruby
+rails g spree_gift_card:seed
+```
 
 3. Working
 ---
@@ -45,16 +45,6 @@ SpreeGiftCard is an extension and one stop solution to integrate gift card funct
 * One can redeem the gift card by applying gift card code at payment step.
 
 **Here is a detailed article with screenshot http://vinsol.com/spreecommerce-gift-card**
-Contributing
-------------
-
-1. Fork the repo.
-2. Clone your repo.
-3. Run `bundle install`.
-4. Run `bundle exec rake test_app` to create the test application in `spec/test_app`.
-5. Make your changes.
-6. Ensure specs pass by running `bundle exec rspec spec`.
-7. Submit your pull request.
 
 Testing
 -------
@@ -73,5 +63,3 @@ Simply add this require statement to your spec_helper:
 ```ruby
 require 'spree_gift_card/factories'
 ```
-
-Copyright (c) 2012 Jeff Dutil, released under the New BSD License
