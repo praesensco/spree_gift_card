@@ -47,6 +47,10 @@ module Spree
         end
       end
 
+      def e_gift_card_only?
+        line_item.all? { line_item.is_e_gift_card? }
+      end
+
       private
 
       def create_gift_card_payment(payment_method, gift_card, amount)

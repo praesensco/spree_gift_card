@@ -35,6 +35,7 @@ module Spree
 
     scope :active, -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
+    scope :deliverable, -> { active.where('sent_at IS NULL AND (delivery_on IS NULL OR delivery_on <= ?)', Time.now) }
 
     def e_gift_card?
       variant.product.is_e_gift_card?
@@ -183,7 +184,7 @@ module Spree
         debit(amount_remaining)
         build_store_credit(user, previous_current_value).save!
       end
-    rescue Exception => e
+    rescue StandardError
       errors[:base] = 'There some issue while redeeming the gift card.'
       false
     end
