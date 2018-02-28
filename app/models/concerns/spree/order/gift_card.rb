@@ -48,7 +48,7 @@ module Spree
       end
 
       def e_gift_card_only?
-        line_item.all? { line_item.is_e_gift_card? }
+        line_items.all?(&:is_e_gift_card?)
       end
 
       private
