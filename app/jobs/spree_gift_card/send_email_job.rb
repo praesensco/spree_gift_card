@@ -11,6 +11,7 @@ module SpreeGiftCard
         where(variant: e_gift_card_product.master).
         each do |gift_card|
           next unless gift_card_shipped(gift_card)
+          order = gift_card.line_item.order
           Spree::OrderMailer.gift_card_email(gift_card.id, order).deliver_later
         end
     end
