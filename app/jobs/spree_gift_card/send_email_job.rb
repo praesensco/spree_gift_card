@@ -9,6 +9,7 @@ module SpreeGiftCard
       Spree::GiftCard.
         deliverable.
         where(variant: e_gift_card_product.master).
+        where.not(line_item: nil).
         each do |gift_card|
           next unless gift_card_shipped(gift_card)
           order = gift_card.line_item.order
