@@ -1,4 +1,4 @@
-require 'spree/core/validators/email'
+# require 'spree/core/validators/email'
 
 module Spree
   class GiftCard < ActiveRecord::Base
@@ -13,11 +13,12 @@ module Spree
     VALUES = [50, 100, 150, 200, 250, 300, 500, 1000].freeze
 
     belongs_to :variant
-    belongs_to :line_item
+    belongs_to :line_item, optional: true
 
     has_many :transactions, class_name: 'Spree::GiftCardTransaction'
 
-    validates :current_value, :original_value, :code, presence: true
+    validates :current_value, :original_value, presence: true
+    validates :code, presence: true, uniqueness: true
 
     with_options allow_blank: true do
       validates :code, uniqueness: { case_sensitive: false }
@@ -212,8 +213,8 @@ module Spree
     end
 
     def set_values
-      self.current_value ||= line_item.try(:price)
-      self.original_value ||= line_item.try(:price)
+      self.current_value ||= (self.variant.try(:price) || line_item.try(:price))
+      self.original_value ||= (self.variant.try(:price) || line_item.try(:price))
     end
 
     def amount_remaining_is_positive

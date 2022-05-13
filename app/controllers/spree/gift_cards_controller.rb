@@ -23,13 +23,15 @@ module Spree
     end
 
     def create
+      debugger
       begin
+
         # Wrap the transaction script in a transaction so it is an atomic operation
         Spree::GiftCard.transaction do
-          @gift_card = GiftCard.new(gift_card_params)
+          @gift_card = Spree::GiftCard.new(gift_card_params)
           @gift_card.save!
           # Create line item
-          line_item = LineItem.new(quantity: 1)
+          line_item = Spree::LineItem.new(quantity: 1)
           line_item.gift_card = @gift_card
           line_item.variant = @gift_card.variant
           line_item.price = @gift_card.variant.price
@@ -77,7 +79,7 @@ module Spree
     end
 
     def gift_card_params
-      params.require(:gift_card).permit(:email, :name, :note, :variant_id, :sender_name, :sender_email, :delivery_on)
+      params.require(:gift_card).permit(:email, :name, :note, :variant_id, :sender_name, :sender_email, :delivery_on, :send_at, :original_value, :current_value)
     end
 
     def load_master_variant

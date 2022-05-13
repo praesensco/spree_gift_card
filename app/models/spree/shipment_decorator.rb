@@ -1,5 +1,5 @@
 module Spree
-  Shipment.class_eval do
+  module ShipmentDecorator
     # state_machine do
     #   after_transition to: :shipped, do: :deliver_e_gift_cards
     # end
@@ -16,3 +16,5 @@ module Spree
     end
   end
 end
+
+::Spree::Shipment.prepend(Spree::ShipmentDecorator)
