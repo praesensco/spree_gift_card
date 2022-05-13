@@ -6,14 +6,36 @@
       <fieldset class="form-group">
         <%= f.label :variant_id, Spree.t(:value) %>
         <span class="required">*</span><br/>
-        <%= f.select :variant_id, variants_values(@gift_card_variants), { selected: @variant.try(:id) }, class: 'form-control' %>
+        <%= f.select :variant_id, variants_values(@gift_card_variants), { selected: @variant.try(:id) } %>
       </fieldset>
+
+      <p class="form-group">
+        <%= f.label :email, Spree.t("email") %>
+        <span class="required">*</span><br/>
+        <%= f.text_field :email, class: 'form-control' %>
+      </p>
+
+      <p class="form-group">
+        <%= f.label :name, Spree.t("recipient_name") %>
+        <span class="required">*</span><br/>
+        <%= f.text_field :name, class: 'form-control' %>
+      </p>
+
+      <p class="form-group">
+        <%= f.label :send_at, Spree.t("send on") %><br/>
+        <span class="giftcard_send_on"><%= f.datetime_select(:send_at) %></span>
+      </p>
+
       <fieldset class="form-group">
         <%= f.label :note, Spree.t("note") %><br/>
         <%= f.text_area :note, rows: 6, class: 'form-control' %>
       </fieldset>
 
-      <%= f.submit Spree.t(:add_to_cart), class: 'btn btn-lg btn-success btn-block' %>
+      <%= f.submit Spree.t(:add_to_cart), class: 'btn btn-success' %>
     </div>
   <% end %>
+
+
 </fieldset>
+
+

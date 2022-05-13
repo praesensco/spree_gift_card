@@ -3,6 +3,8 @@ module Spree
     before_action :authorize
 
     def create
+      debugger
+
       code = params[:code]
       if code.blank?
         flash[:error] = 'Invalid Gift Card code.'
@@ -27,7 +29,9 @@ module Spree
       @gift_cards = spree_current_user.gift_cards
     end
 
-    def new; end
+    def new
+      debugger
+    end
 
     private
 

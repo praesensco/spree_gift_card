@@ -1,5 +1,9 @@
 module Spree
-  StoreCreditCategory.class_eval do
-    scope :gift_card, -> { where(name: 'Gift Card') }
+  module StoreCreditCategoryDecorator
+    def self.prepended(base)
+      base.scope :gift_card, -> { where(name: 'Gift Card') }
+    end
   end
 end
+
+::Spree::StoreCreditCategory.prepend(Spree::StoreCreditCategoryDecorator)

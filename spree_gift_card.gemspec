@@ -9,8 +9,7 @@ Gem::Specification.new do |s|
   s.email       = ['wojtek@praesens.co']
   s.homepage    = 'https://github.com/praesensco/spree_gift_card'
 
-  spree_version = '~> 3.3.0'
-
+  spree_version = '~> 4.1.3'
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
 
